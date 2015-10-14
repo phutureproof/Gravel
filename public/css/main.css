@@ -1,10 +1,1 @@
-html, body {
-	font-family: tahoma, verdana, arial, sans-serif;
-	font-size: 1em;
-}
-
-input, button, select, textarea {
-	font-family: inherit;
-	font-size: 1em;
-	padding: 3px;
-}
+html, body {	font-family: tahoma, verdana, arial, sans-serif;	font-size: 1em;}input, button, select, textarea {	font-family: inherit;	font-size: 1em;	padding: 3px;}

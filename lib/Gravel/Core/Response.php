@@ -1,8 +1,1 @@
-<?php
-
-namespace Gravel\Core;
-
-class Response
-{
-
-}
+<?phpnamespace Gravel\Core;class Response{}
