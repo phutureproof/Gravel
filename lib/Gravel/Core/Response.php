@@ -1,1 +1,1 @@
-<?phpnamespace Gravel\Core;class Response{}
+<?phpnamespace Gravel\Core;class Response{	public $data = [];	public function __destruct()	{		$this->generateResponse();	}	public function addOutput($file, $data = [])	{		ob_start();		require($file);		$output = ob_get_clean();		$this->data[$file] = $output;	}	public function generateResponse()	{		foreach ($this->data as $k => $v) {			echo $v;		}	}}
