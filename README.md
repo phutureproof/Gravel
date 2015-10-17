@@ -1,15 +1,1 @@
-# Gravel PHP Framework
----
-
-##Quick Start
----
-
-###Models
----
-
-###Views
----
-
-###Controllers
----
-
+# Gravel PHP Framework##Quick Start###Models###Views###Controllers
