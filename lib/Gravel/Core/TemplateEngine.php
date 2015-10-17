@@ -16,6 +16,8 @@ abstract class TemplateEngine
 
 	public static function parseTemplate($file, $data = [])
 	{
+		extract($data);
+
 		ob_start();
 		require($file);
 		$output = ob_get_clean();
