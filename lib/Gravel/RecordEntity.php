@@ -27,7 +27,6 @@ class RecordEntity
 
     public function __get($name)
     {
-        echo $name;
         return (isset($this->_data[$name])) ? $this->_data[$name] : false;
     }
 
