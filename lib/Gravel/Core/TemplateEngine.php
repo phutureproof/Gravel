@@ -9,12 +9,13 @@ abstract class TemplateEngine
 		'compiled' => ''
 	];
 
+	public static $includeRegex = "!@include\('(?<includes>.*)'\)!";
 	public static $yieldRegex = "!@yield\('(?<yields>.*)'\)!";
 	public static $extendsRegex = "!@extends\('(?<extends>.*)'\)!";
 	public static $sectionsRegex = "!@section\('(?<sections>.*)'\)!";
 	private static $_privateTemplateName = 'gravel_private_template';
 
-	public static function parseTemplate($file, $data = [])
+	public static function parseTemplate($file, $data = [], $isInclude = false)
 	{
 		extract($data);
 
@@ -23,11 +24,14 @@ abstract class TemplateEngine
 		$output = ob_get_clean();
 		$file = substr($file, strlen(APP_DIR . '/views/'), -4);
 
-		if (!preg_match("!@(extends|section|endsection|yield)!", $output)) {
+		if (!preg_match("!@(extends|section|endsection|yield|include)!U", $output) && !$isInclude) {
 			self::$data['compiled'] = $output;
-			return true;
 		} else {
 			$toAdd = [];
+
+			if ($isInclude) {
+				$toAdd['sections'][self::$_privateTemplateName] = $output;
+			}
 
 			// match yields
 			if (preg_match_all(self::$yieldRegex, $output, $matches)) {
@@ -35,6 +39,14 @@ abstract class TemplateEngine
 					$toAdd['yields'][$yield] = true;
 					$toAdd['sections'][self::$_privateTemplateName] = $output;
 					$toAdd['sections'][$yield] = '';
+				}
+			}
+
+			// match includes
+			if (preg_match_all(self::$includeRegex, $output, $matches)) {
+				foreach ($matches['includes'] as $include) {
+					$toAdd['includes'][$include] = true;
+					self::parseTemplate(APP_DIR . '/views/' . $include . '.php', $data, true);
 				}
 			}
 
@@ -61,38 +73,63 @@ abstract class TemplateEngine
 				}
 			}
 			self::$data['views'][$file] = $toAdd;
-			return true;
 		}
+		return true;
 	}
 
 	public static function compile()
 	{
+
 		$views = array_reverse(self::$data['views']);
 
+		// compile includes
 		foreach ($views as $view => $data) {
-			if (isset($data['yields']) && isset($data['sections']['content'])) {
-				foreach ($data['yields'] as $section => $v) {
+			if (isset($data['includes'])) {
+				foreach ($data['includes'] as $section => $v) {
 					foreach ($views as $subview => $subdata) {
-						if ($subview != $view) {
-							$views[$view]['sections'][$section] .= $views[$subview]['sections'][$section];
+						if ($subview != $view && isset($views[$subview]['sections'][self::$_privateTemplateName])) {
+							$views[$view]['includes'][$section] = $views[$subview]['sections'][self::$_privateTemplateName];
 						}
 					}
 				}
 			}
 		}
 
+		// build includes
 		foreach ($views as $view => $data) {
-			if (isset($data['yields']) && isset($data['sections'][self::$_privateTemplateName])) {
+			if (isset($data['includes'])) {
+				$sections = array_diff_key($data['includes'], [self::$_privateTemplateName => '']);
+				foreach ($sections as $section => $content) {
+					$views[$view]['sections'][self::$_privateTemplateName] = str_replace("@include('$section')", $content, $views[$view]['sections'][self::$_privateTemplateName]);
+				}
+				self::$data['compiled'] = $views[$view]['sections'][self::$_privateTemplateName];
+			}
+		}
 
+		// compile yields
+		foreach ($views as $view => $data) {
+			if (isset($data['yields'])) {
+				foreach ($data['yields'] as $section => $v) {
+					foreach ($views as $subview => $subdata) {
+						if ($subview != $view && isset($views[$subview]['sections'][$section])) {
+							$views[$view]['sections'][$section] = $views[$subview]['sections'][$section];
+						}
+					}
+				}
+			}
+		}
+
+		// build yields
+		foreach ($views as $view => $data) {
+			if (isset($data['yields']) ) {
 				$sections = array_diff_key($data['sections'], [self::$_privateTemplateName => '']);
-
 				foreach ($sections as $section => $content) {
 					$views[$view]['sections'][self::$_privateTemplateName] = str_replace("@yield('$section')", $content, $views[$view]['sections'][self::$_privateTemplateName]);
 				}
-
-				self::$data['compiled'] .= $views[$view]['sections'][self::$_privateTemplateName];
+				self::$data['compiled'] = $views[$view]['sections'][self::$_privateTemplateName];
 			}
 		}
+
 	}
 
 }
