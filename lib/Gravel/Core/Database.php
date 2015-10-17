@@ -12,7 +12,7 @@ class Database
      */
     private function __construct()
     {
-        $config = parse_ini_file(BASE_DIR . '/app.config.ini');
+        $config = parse_ini_file(BASE_DIR . '/app.config.ini', true)['database'];
 
         $this->_con = new \PDO(
             "{$config['driver']}:host={$config['hostname']};dbname={$config['database']};charset={$config['charset']}",
