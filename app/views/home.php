@@ -6,3 +6,7 @@
 <p>This code is coming from /views/home.php</p>
 
 @endsection
+
+@section('javascript')
+
+@endsection
