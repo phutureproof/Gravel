@@ -1,4 +1,15 @@
-# Gravel
-Gravel PHP Framework
+# Gravel PHP Framework
+---
 
-This is my PHP framework
+##Quick Start
+---
+
+###Models
+---
+
+###Views
+---
+
+###Controllers
+---
+
