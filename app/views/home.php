@@ -1,3 +1,10 @@
+<?php
+
+use Gravel\Core\TemplateEngine;
+
+TemplateEngine::setPageTitle('Gravel Framework');
+?>
+
 @extends('templates/main')
 
 @section('content')

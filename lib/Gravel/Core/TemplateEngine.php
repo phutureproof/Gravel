@@ -14,6 +14,25 @@ abstract class TemplateEngine
 	public static $extendsRegex = "!@extends\('(?<extends>.*)'\)!";
 	public static $sectionsRegex = "!@section\('(?<sections>.*)'\)!";
 	private static $_privateTemplateName = 'gravel_private_template';
+	private static $_pageTitle = 'Gravel';
+
+	/**
+	 * @return string
+	 */
+	public static function getPageTitle()
+	{
+		return static::$_pageTitle;
+	}
+
+	/**
+	 * @param string $pageTitle
+	 */
+	public static function setPageTitle($pageTitle)
+	{
+		static::$_pageTitle = $pageTitle;
+	}
+
+
 
 	public static function parseTemplate($file, $data = [], $isInclude = false)
 	{
@@ -102,7 +121,6 @@ abstract class TemplateEngine
 				foreach ($sections as $section => $content) {
 					$views[$view]['sections'][self::$_privateTemplateName] = str_replace("@include('$section')", $content, $views[$view]['sections'][self::$_privateTemplateName]);
 				}
-				self::$data['compiled'] = $views[$view]['sections'][self::$_privateTemplateName];
 			}
 		}
 
