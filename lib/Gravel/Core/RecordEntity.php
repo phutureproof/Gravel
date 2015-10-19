@@ -1,8 +1,6 @@
 <?php
 
-namespace Gravel;
-
-use Gravel\Core\Database;
+namespace Gravel\Core;
 
 class RecordEntity
 {
@@ -49,14 +47,11 @@ class RecordEntity
     public function save()
     {
         $db = Database::getInstance();
-
         $data = $this->_data;
-
         $key = key($this->_data);
-
         $columns = array_diff_key($data, [$key => $key]);
-
         $updates = [];
+
         foreach ($columns as $k => $v) {
             $v = $db->quote($v);
             $updates[] = "{$k} = {$v}";
@@ -64,7 +59,7 @@ class RecordEntity
         $updates = implode(', ', $updates);
 
         $statement = "UPDATE {$this->_table} SET {$updates} WHERE {$key} = {$data[$key]}";
-
+	    // TODO :: Implement save here
         echo $statement;
     }
 

@@ -1,36 +1,43 @@
 @extends('templates/main')
 
 @section('content')
-<h2>This is a header</h2>
-<div class="well well-sm">
-	<p>This code is coming from /views/home.php</p>
-	<?php if (isset($users)): ?>
-		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($users as $user): ?>
-					<tr>
-						<td><?= $user->firstname ?> <?= $user->lastname; ?></td>
-						<td><?= $user->email; ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-	<?php endif; ?>
+<div class="container">
+	<div class="row">
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+				<li class="active"><a href="#Routing">Routing</a>
+				<li><a href="#Models">Models</a></li>
+				<li><a href="#Views">Views</a></li>
+				<li><a href="#Controllers">Controllers</a></li></li>
+			</ul>
+		</div>
+		<div class="col-md-10">
+			@include('documentation/routing')
+			@include('documentation/models')
+			@include('documentation/views')
+			@include('documentation/controllers')
+		</div>
+	</div>
 </div>
+
+
 @endsection
 
 @section('javascript')
 <script>
-	!function () {
+	!function ($, undefined) {
 
-		console.log('testing content areas within Gravel framework.')
+		$(function() {
 
-	}()
+			$(document).on('click', '.nav a', function (e) {
+				var $this = $(this);
+				var $parentContainer = $this.parents('.nav:first');
+				$parentContainer.find('li.active').removeClass('active');
+				$this.parents('li:first').addClass('active');
+			});
+
+		});
+
+	}(jQuery);
 </script>
 @endsection

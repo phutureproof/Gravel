@@ -1,1 +1,1 @@
-# Gravel PHP Framework##Quick Start###Models###Views###Controllers
+# Gravel PHP Framework##Quick StartComing soon###ModelsModels extend Gravel\Model which implements several  methods for fetching data.###ViewsComing soon...###ControllersComing soon...
