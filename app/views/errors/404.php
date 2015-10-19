@@ -29,6 +29,10 @@
 	            text-shadow: 2px 2px 2px rgba(125, 125, 125, 0.38);
             }
 
+            a {
+                text-decoration: none;
+            }
+
             h1 {
                 margin: 0;
             }

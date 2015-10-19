@@ -1,25 +1,21 @@
-<?php
-
-use Gravel\Core\TemplateEngine;
-
-TemplateEngine::setPageTitle('Gravel Framework');
-?>
-
 @extends('templates/main')
 
 @section('content')
 <div class="container">
 	<div class="row">
 		<div class="col-md-2">
-			<div class="list-group">
-				<a href="#Models" class="list-group-item active">Models</a>
-				<a href="#Views" class="list-group-item">Views</a>
-				<a href="#Controllers" class="list-group-item">Controllers</a>
-				<a href="#Routing" class="list-group-item">Routing</a>
-			</div>
+			<ul class="nav nav-pills nav-stacked">
+				<li class="active"><a href="#Routing">Routing</a>
+				<li><a href="#Models">Models</a></li>
+				<li><a href="#Views">Views</a></li>
+				<li><a href="#Controllers">Controllers</a></li></li>
+			</ul>
 		</div>
 		<div class="col-md-10">
-			@include('includes/test')
+			@include('documentation/routing')
+			@include('documentation/models')
+			@include('documentation/views')
+			@include('documentation/controllers')
 		</div>
 	</div>
 </div>
@@ -33,15 +29,15 @@ TemplateEngine::setPageTitle('Gravel Framework');
 
 		$(function() {
 
-			$(document).on('click', 'a.list-group-item', function (e) {
+			$(document).on('click', '.nav a', function (e) {
 				var $this = $(this);
-				var $parentContainer = $this.parents('.list-group:first');
-				$parentContainer.find('a.active').removeClass('active');
-				$this.addClass('active');
+				var $parentContainer = $this.parents('.nav:first');
+				$parentContainer.find('li.active').removeClass('active');
+				$this.parents('li:first').addClass('active');
 			});
 
 		});
 
-	}(jQuery)
+	}(jQuery);
 </script>
 @endsection

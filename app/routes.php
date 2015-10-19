@@ -2,8 +2,7 @@
 
 return [
 	'GET'  => [
-		'/'      => 'pagesController::home',
-		'/about' => 'pagesController::about'
+		'/' => 'pagesController::home'
 	],
 	'POST' => [
 
