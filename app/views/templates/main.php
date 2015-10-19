@@ -5,7 +5,6 @@
 		<title><?= \Gravel\Core\TemplateEngine::getPageTitle(); ?></title>
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 
@@ -13,15 +12,18 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="page-header">
-						<h1>This is the main template</h1>
+						<h1>Gravel PHP Framework</h1>
 					</div>
-					@include('includes/topnav')
-				</div>
-				<div class="col-md-12">
-					@yield('content')
 				</div>
 			</div>
 		</div>
+
+		@yield('content')
+
+		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 		@yield('javascript')
+
 	</body>
 </html>

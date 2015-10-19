@@ -65,7 +65,9 @@ abstract class TemplateEngine
 			if (preg_match_all(self::$includeRegex, $output, $matches)) {
 				foreach ($matches['includes'] as $include) {
 					$toAdd['includes'][$include] = true;
-					self::parseTemplate(APP_DIR . '/views/' . $include . '.php', $data, true);
+					$toAdd['sections'][self::$_privateTemplateName] = $output;
+					$replace = self::parseTemplate(APP_DIR . '/views/' . $include . '.php', $data, true);
+					$output = str_replace("@include('{$include}')", $replace, $output);
 				}
 			}
 
@@ -93,7 +95,7 @@ abstract class TemplateEngine
 			}
 			self::$data['views'][$file] = $toAdd;
 		}
-		return true;
+		return $output;
 	}
 
 	public static function compile()

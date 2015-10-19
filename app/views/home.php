@@ -8,29 +8,40 @@ TemplateEngine::setPageTitle('Gravel Framework');
 @extends('templates/main')
 
 @section('content')
-<h2>This is a header</h2>
-<div class="well well-sm">
-	<form action="/notallowed" method="post" accept-charset="utf-8">
-		<div class="formgroup">
-			<label for="">Input[]</label>
-			<input type="text" name="input[]" id="" class="form-control"></div>
-		<div class="formgroup">
-			<label for="">Input[]</label>
-			<input type="text" name="input[]" id="" class="form-control"></div>
-		<div class="formgroup">
-			<label for="">Input[]</label>
-			<input type="text" name="input[]" id="" class="form-control"></div>
-		<button class="btn btn-block btn-primary">SEND</button>
-	</form>
+<div class="container">
+	<div class="row">
+		<div class="col-md-2">
+			<div class="list-group">
+				<a href="#Models" class="list-group-item active">Models</a>
+				<a href="#Views" class="list-group-item">Views</a>
+				<a href="#Controllers" class="list-group-item">Controllers</a>
+				<a href="#Routing" class="list-group-item">Routing</a>
+			</div>
+		</div>
+		<div class="col-md-10">
+			@include('includes/test')
+		</div>
+	</div>
 </div>
+
+
 @endsection
 
 @section('javascript')
 <script>
-	!function () {
+	!function ($, undefined) {
 
-		console.log('testing content areas within Gravel framework.')
+		$(function() {
 
-	}()
+			$(document).on('click', 'a.list-group-item', function (e) {
+				var $this = $(this);
+				var $parentContainer = $this.parents('.list-group:first');
+				$parentContainer.find('a.active').removeClass('active');
+				$this.addClass('active');
+			});
+
+		});
+
+	}(jQuery)
 </script>
 @endsection
