@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Whoops</title>
         <style>
-	        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+	        @import url('https://fonts.googleapis.com/css?family=Montserrat');
             html, body {
 	            font-family: 'Montserrat';
                 width: 100%;
@@ -39,6 +39,8 @@
            <div class="error">
                <h1>Whoops....</h1>
                <p>Looks like you've found a page that doesn't exist!</p>
+
+               <p><a href="/">Return to the home page.</a></p>
            </div>
        </div>
     </body>

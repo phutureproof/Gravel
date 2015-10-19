@@ -10,25 +10,18 @@ TemplateEngine::setPageTitle('Gravel Framework');
 @section('content')
 <h2>This is a header</h2>
 <div class="well well-sm">
-	<p>This code is coming from /views/home.php</p>
-	<?php if (isset($users)): ?>
-		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($users as $user): ?>
-					<tr>
-						<td><?= $user->firstname ?> <?= $user->lastname; ?></td>
-						<td><?= $user->email; ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-	<?php endif; ?>
+	<form action="/notallowed" method="post" accept-charset="utf-8">
+		<div class="formgroup">
+			<label for="">Input[]</label>
+			<input type="text" name="input[]" id="" class="form-control"></div>
+		<div class="formgroup">
+			<label for="">Input[]</label>
+			<input type="text" name="input[]" id="" class="form-control"></div>
+		<div class="formgroup">
+			<label for="">Input[]</label>
+			<input type="text" name="input[]" id="" class="form-control"></div>
+		<button class="btn btn-block btn-primary">SEND</button>
+	</form>
 </div>
 @endsection
 
