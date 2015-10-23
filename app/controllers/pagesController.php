@@ -8,4 +8,14 @@ class pagesController extends Controller
     {
 	    $this->loadView('home');
     }
+
+	public function dev()
+	{
+		// handle post data
+		if (count($_POST)) {
+
+		}
+
+		$this->loadView('add-post');
+	}
 }
