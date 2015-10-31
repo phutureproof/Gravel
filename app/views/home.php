@@ -1,43 +1,29 @@
 @extends('templates/main')
 
 @section('content')
+
 <div class="container">
 	<div class="row">
-		<div class="col-md-2">
-			<ul class="nav nav-pills nav-stacked">
-				<li class="active"><a href="#Routing">Routing</a>
-				<li><a href="#Models">Models</a></li>
-				<li><a href="#Views">Views</a></li>
-				<li><a href="#Controllers">Controllers</a></li></li>
-			</ul>
-		</div>
-		<div class="col-md-10">
-			@include('documentation/routing')
-			@include('documentation/models')
-			@include('documentation/views')
-			@include('documentation/controllers')
+		<div class="col-md-12">
+
+			<table class="table-bordered table-condensed table-hover table-striped">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+				</tr>
+
+				<?php foreach ($users as $user) : ?>
+					<tr>
+						<td><?= $user->firstname; ?></td>
+						<td><?= $user->lastname; ?></td>
+						<td><?= $user->email; ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+			<?= $pagination; ?>
 		</div>
 	</div>
 </div>
 
-
-@endsection
-
-@section('javascript')
-<script>
-	!function ($, undefined) {
-
-		$(function() {
-
-			$(document).on('click', '.nav a', function (e) {
-				var $this = $(this);
-				var $parentContainer = $this.parents('.nav:first');
-				$parentContainer.find('li.active').removeClass('active');
-				$this.parents('li:first').addClass('active');
-			});
-
-		});
-
-	}(jQuery);
-</script>
 @endsection
