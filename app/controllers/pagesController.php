@@ -6,16 +6,14 @@ class pagesController extends Controller
 {
     public function home()
     {
-	    $this->loadView('home');
+	    $user = User::find(1);
+	    $user->firstname = 'Dale';
+	    $user->lastname = 'Paget';
+	    $user->email = 'dale.paget@outlook.com';
+	    $user->password = sha1('password');
+	    $user->save();
+
+	    echo User::all();
     }
 
-	public function dev()
-	{
-		// handle post data
-		if (count($_POST)) {
-
-		}
-
-		$this->loadView('add-post');
-	}
 }

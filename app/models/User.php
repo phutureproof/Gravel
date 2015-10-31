@@ -1,8 +1,6 @@
 <?php
 
-use Gravel\Model;
-
-class UserExample extends Model
+class User extends \Gravel\Model
 {
 	protected static $table = 'users';
 	protected static $hidden = ['id', 'password'];

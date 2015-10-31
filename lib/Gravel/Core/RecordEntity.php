@@ -49,16 +49,28 @@ class RecordEntity
 		$db = Database::getInstance();
 		$data = $this->_data;
 		$key = key($this->_data);
-		$columns = array_diff_key($data, [$key => $key]);
-		$values = array_values($columns);
-		$updates = [];
-		foreach ($columns as $k => $v) {
-			$updates[] = "{$k} = ?";
+
+		// saving as a new record
+		if (empty($this->_data[$this->_idColumn])) {
+			$columns = array_keys($this->_data);
+			$values = array_values($this->_data);
+			$columnsInsert = implode(", ", $columns);
+			$valuesInsert = implode(", ", array_pad([], count($values), '?'));
+			$sql = "INSERT INTO {$this->_table} ({$columnsInsert}) VALUES ({$valuesInsert});";
+		} else {
+			// or saving an update
+			$columns = array_diff_key($data, [$key => $key]);
+			$values = array_values($columns);
+			$updates = [];
+			foreach ($columns as $k => $v) {
+				$updates[] = "{$k} = ?";
+			}
+			$updates = implode(', ', $updates);
+			$sql = "UPDATE {$this->_table} SET {$updates} WHERE {$key} = {$data[$key]}";
 		}
-		$updates = implode(', ', $updates);
-		$sql = "UPDATE {$this->_table} SET {$updates} WHERE {$key} = {$data[$key]}";
 		$statement = $db->prepare($sql);
 		return $statement->execute($values);
 	}
+
 
 }
