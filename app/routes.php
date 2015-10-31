@@ -2,10 +2,8 @@
 
 return [
 	'GET'  => [
-		'/'    => 'pagesController::home',
-		'/dev' => 'pagesController::dev'
+		'/' => 'pagesController::home'
 	],
 	'POST' => [
-		'/dev' => 'pageController::dev'
 	]
 ];

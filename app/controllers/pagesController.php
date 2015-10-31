@@ -6,14 +6,11 @@ class pagesController extends Controller
 {
     public function home()
     {
-	    $user = User::find(1);
-	    $user->firstname = 'Dale';
-	    $user->lastname = 'Paget';
-	    $user->email = 'dale.paget@outlook.com';
-	    $user->password = sha1('password');
-	    $user->save();
+	    $offset = (isset($_GET['page'])) ? $_GET['page'] : 0;
+	    $users = User::all();
+	    $users->paginate(3, $offset);
+	    $pagination = $users->generatePaginationLinks();
 
-	    echo User::all();
+	    $this->loadView('home', compact('users', 'pagination'));
     }
-
 }
