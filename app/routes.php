@@ -5,5 +5,6 @@ return [
 		'/' => 'pagesController::home'
 	],
 	'POST' => [
+        '/' => 'pagesController::home'
 	]
 ];

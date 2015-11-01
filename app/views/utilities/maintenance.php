@@ -1,32 +1,13 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Document</title>
-		<style>
-			html, body {
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				height: 100%;
-				display: table;
-			}
+@extends('templates/main')
 
-			.container {
-				font-family: tahoma, verdana, arial, sans-serif;
-				display: table-cell;
-				width: 100%;
-				height: 100%;
-				text-align: center;
-				vertical-align: middle;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<h1>Apologies...</h1>
+@section('content')
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p class="lead">The site is currently in maintenance mode</p>
 
-			<p>The site is currently down for mantenance, please come back soon</p>
+			<p>Please come back soon</p>
 		</div>
-	</body>
-</html>
+	</div>
+</div>
+@endsection
