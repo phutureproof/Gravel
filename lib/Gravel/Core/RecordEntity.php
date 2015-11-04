@@ -50,10 +50,9 @@ class RecordEntity
 
     public function save()
     {
-
         $db = Database::getInstance();
         $data = $this->_data;
-        $key = key($this->_data);
+        $key = key($this->_data); // this is the primary key column (assumed to be the first column in a table)
 
         // saving as a new record
         if (empty($this->_data[$this->_idColumn])) {
@@ -64,6 +63,8 @@ class RecordEntity
             $sql = "INSERT INTO {$this->_table} ({$columnsInsert}) VALUES ({$valuesInsert});";
         } else {
             // or saving an update
+            // for an update we remove the primary key
+            // and use it at the end for the where clause
             $columns = array_diff_key($data, [$key => $key]);
             $values = array_values($columns);
             $updates = [];
@@ -86,18 +87,51 @@ class RecordEntity
             return true;
         }
 
-        foreach (array_keys($this->_validationRules) as $rule) {
-            if (!isset($data[$rule])) {
-                Gravel::$formErrors[] = 'Missing data for ' . $this->_validationRules[$rule][0];
+        foreach ($this->_validationRules as $ruleName => list($label, $rule)) {
+            if (isset($data[$ruleName])) {
+
+                // required
+                if (stripos($rule, 'required') !== false && empty($data[$ruleName])) {
+                    array_push(Gravel::$formErrors, $label . ' is required.');
+                    continue;
+                }
+
+                // email
+                if (stripos($rule, 'email') !== false && !filter_var($data[$ruleName], FILTER_VALIDATE_EMAIL)) {
+                    array_push(Gravel::$formErrors, $label . ' should be a valid email address.');
+                    continue;
+                }
+
+                // min_length[n]
+                if (preg_match("!min_length\[(?<n>\d+)\]!", $rule, $matches)) {
+                    if (strlen($data[$ruleName]) < $matches['n']) {
+                        $matches['n'] = number_format($matches['n'], 0);
+                        array_push(Gravel::$formErrors, $label . ' should be at least ' . $matches['n'] . ' characters long.');
+                        continue;
+                    }
+                }
+
+                // max_length[n]
+                if (preg_match("!max_length\[(?<n>\d+)\]!", $rule, $matches)) {
+                    if (strlen($data[$ruleName]) > $matches['n']) {
+                        $matches['n'] = number_format($matches['n'], 0);
+                        array_push(Gravel::$formErrors, $label . ' should be under ' . $matches['n'] . ' characters long.');
+                        continue;
+                    }
+                }
             }
         }
 
-        if (!Gravel::$formErrors) {
-            foreach (array_keys($this->_validationRules) as $rule) {
-                $this->$rule = $data[$rule];
+        if (count(Gravel::$formErrors) > 0) {
+            return false;
+        }
+
+        foreach ($this->_data as $k => $v) {
+            if (isset($data[$k])) {
+                $this->_data[$k] = $data[$k];
             }
         }
 
-        return false;
+        return true;
     }
 }

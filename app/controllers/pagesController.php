@@ -4,18 +4,20 @@ use Gravel\Controller;
 
 class pagesController extends Controller
 {
-    public function home()
+    public function home($page = 1)
     {
         if (count($_POST) > 0) {
             $user = User::create();
-            $user->validate($_POST);
-            var_dump($user);
+            if ($user->validate($_POST)) {
+                $user->save();
+                header("Location: /");
+                exit;
+            }
         }
 
-        $offset = (isset($_GET['page'])) ? $_GET['page'] : 0;
         $users = User::all();
-        $users->paginate(3, $offset);
-        $pagination = $users->generatePaginationLinks();
+        $users->paginate(5, $page);
+        $pagination = $users->generatePaginationLinks('/page/', $page);
 
         $this->loadView('home', compact('users', 'pagination'));
     }
