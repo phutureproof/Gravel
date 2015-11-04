@@ -17,15 +17,22 @@ class Router
     {
         $uri = Gravel::$request->uri;
         $type = Gravel::$request->type;
-        $toCheck = $this->routes[$type];
-        if(array_key_exists($uri, $toCheck)) {
-            list($controller, $method) = explode('::', $this->routes[$type][$uri]);
-            require_once(APP_DIR . "/controllers/{$controller}.php");
-            $controller = new $controller();
-            // TODO :: Implement url parameters as passed data
-            call_user_func_array([$controller, $method], []);
-        } else {
-            Gravel::show404();
+        $patterns = $this->routes[$type];
+        $params = [];
+        foreach ($patterns as $pattern => $controller) {
+            $route = $pattern;
+            $pattern = str_replace(['(num)', '(string)'], ['(?<n>\d+)', '(?<s>\w+)'], $pattern);
+            if (preg_match("!" . $pattern . "!", $uri, $matches)) {
+                foreach ($matches as $k => $v) {
+                    if (!is_numeric($k)) {
+                        $params[] = $matches[$k];
+                    }
+                }
+                list($controller, $method) = explode('::', $this->routes[$type][$route]);
+                require_once(APP_DIR . "/controllers/{$controller}.php");
+                $controller = new $controller();
+                call_user_func_array([$controller, $method], $params);
+            }
         }
     }
 

@@ -6,6 +6,8 @@
 	<div class="row">
 		<div class="col-md-12">
 
+            @include('create-user-form')
+
 			<table class="table-bordered table-condensed table-hover table-striped">
 				<tr>
 					<th>First Name</th>
@@ -22,7 +24,8 @@
 				<?php endforeach; ?>
 			</table>
 			<?= $pagination; ?>
-		</div>
+
+        </div>
 	</div>
 </div>
 
