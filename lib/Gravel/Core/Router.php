@@ -21,8 +21,8 @@ class Router
         $params = [];
         foreach ($patterns as $pattern => $controller) {
             $route = $pattern;
-            $pattern = str_replace(['(num)', '(string)'], ['(?<n>\d+)', '(?<s>\w+)'], $pattern);
-            if (preg_match("!" . $pattern . "!", $uri, $matches)) {
+            $pattern = str_replace(['(num)', '(string)', '(any)'], ['(?<n>\d+)', '(?<s>\w+)', '(?<s>.*)'], $pattern);
+            if (preg_match("!^" . $pattern . "$!", $uri, $matches)) {
                 foreach ($matches as $k => $v) {
                     if (!is_numeric($k)) {
                         $params[] = $matches[$k];
@@ -32,9 +32,8 @@ class Router
                 require_once(APP_DIR . "/controllers/{$controller}.php");
                 $controller = new $controller();
                 call_user_func_array([$controller, $method], $params);
+                break;
             }
         }
     }
-
-
 }
