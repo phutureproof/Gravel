@@ -1,36 +1,43 @@
+<?php use Gravel\Gravel; ?>
+
 @extends('templates/main')
 
 @section('content')
-<h2>This is a header</h2>
-<div class="well well-sm">
-	<p>This code is coming from /views/home.php</p>
-	<?php if (isset($users)): ?>
-		<table>
-			<thead>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+
+			<table class="table-bordered table-condensed table-hover table-striped">
 				<tr>
-					<th>Name</th>
+					<th>First Name</th>
+					<th>Last Name</th>
 					<th>Email</th>
+					<th>Options</th>
 				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($users as $user): ?>
+
+				<?php foreach ($users as $user) : ?>
 					<tr>
-						<td><?= $user->firstname ?> <?= $user->lastname; ?></td>
+						<td><?= $user->firstname; ?></td>
+						<td><?= $user->lastname; ?></td>
 						<td><?= $user->email; ?></td>
+						<td>
+							<a class="btn btn-danger" href="/delete/<?= $user->id; ?>"><span class="glyphicon glyphicon-trash"></span></a>
+						</td>
 					</tr>
 				<?php endforeach; ?>
-			</tbody>
-		</table>
-	<?php endif; ?>
+
+			</table>
+
+			<?= $pagination; ?>
+		</div>
+		<div class="col-md-6">
+			<button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target=".formWrapper">Create User</button>
+			<div class="formWrapper <?php if (!Gravel::$formErrors): ?>collapse<?php endif; ?>">
+				<div class="well">@include('create-user-form')</div>
+			</div>
+        </div>
+	</div>
 </div>
-@endsection
 
-@section('javascript')
-<script>
-	!function () {
-
-		console.log('testing content areas within Gravel framework.')
-
-	}()
-</script>
 @endsection

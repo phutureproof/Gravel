@@ -2,10 +2,11 @@
 
 return [
 	'GET'  => [
-		'/'      => 'pagesController::home',
-		'/about' => 'pagesController::about'
+			'/'           => 'pagesController::home',
+			'/page/(num)' => 'pagesController::home'
 	],
 	'POST' => [
-
+			'/'           => 'pagesController::home',
+			'/page/(num)' => 'pagesController::home'
 	]
 ];
