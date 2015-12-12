@@ -32,8 +32,10 @@ class Router
                 require_once(APP_DIR . "/controllers/{$controller}.php");
                 $controller = new $controller();
                 call_user_func_array([$controller, $method], $params);
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 }
