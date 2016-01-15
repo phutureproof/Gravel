@@ -16,9 +16,9 @@ class pagesController extends Controller
         }
 
         $users = User::all();
+
         $users->paginate(5, $page);
         $pagination = $users->generatePaginationLinks('/page/', $page);
-
         $this->loadView('home', compact('users', 'pagination'));
     }
 }
