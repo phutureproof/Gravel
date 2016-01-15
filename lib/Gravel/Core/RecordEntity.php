@@ -52,7 +52,7 @@ class RecordEntity
     {
         $db = Database::getInstance();
         $data = $this->_data;
-        $key = key($this->_data); // this is the primary key column (assumed to be the first column in a table)
+	    $key = $this->_idColumn; // this is the primary key column (assumed to be the first column in a table)
 
         // saving as a new record
         if (empty($this->_data[$this->_idColumn])) {
@@ -127,6 +127,8 @@ class RecordEntity
         }
 
         foreach ($this->_data as $k => $v) {
+	        echo $data[$k];
+
             if (isset($data[$k])) {
                 $this->_data[$k] = $data[$k];
             }

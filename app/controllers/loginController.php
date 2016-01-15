@@ -1,9 +1,12 @@
 <?php
 
+use Gravel\TemplateEngine;
+
 class loginController extends \Gravel\Controller
 {
 	public function index()
 	{
+		TemplateEngine::setPageTitle('Admin Login');
 		$this->loadView('admin/login');
 	}
 

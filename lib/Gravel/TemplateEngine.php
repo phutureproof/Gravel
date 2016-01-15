@@ -1,6 +1,6 @@
 <?php
 
-namespace Gravel\Core;
+namespace Gravel;
 
 abstract class TemplateEngine
 {
@@ -32,6 +32,13 @@ abstract class TemplateEngine
 		static::$_pageTitle = $pageTitle;
 	}
 
+	/**
+	 * @param string $pageTitle
+	 */
+	public static function extendPageTitle($pageTitle)
+	{
+		static::$_pageTitle .= $pageTitle;
+	}
 
 
 	public static function parseTemplate($file, $data = [], $isInclude = false)

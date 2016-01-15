@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title><?= \Gravel\Core\TemplateEngine::getPageTitle(); ?></title>
+		<title><?= \Gravel\TemplateEngine::getPageTitle(); ?></title>
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	</head>
 	<body>

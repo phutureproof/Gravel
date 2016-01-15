@@ -1,3 +1,7 @@
+<?php
+use Gravel\Gravel;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -47,10 +51,11 @@
 			<div class="row">
 				<div class="col-md-2">
 					<ul class="nav nav-pills nav-stacked">
-						<li><a href="/admin/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+						<li class="<?= (preg_match('/dashboard/', Gravel::$request->uri)) ? 'active' : null; ?>"><a href="/admin/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 						<li class="separator"></li>
-						<li><a href="/admin/users"><span class="glyphicon glyphicon-th-list"></span> Users</a></li>
-						<li><a href="/admin/blog"><span class="glyphicon glyphicon-th-list"></span> Blog Posts</a></li>
+						<li class="<?= (preg_match('/users/', Gravel::$request->uri)) ? 'active' : null; ?>"><a href="/admin/users"><span class="glyphicon glyphicon-th-list"></span> Users</a></li>
+						<li class="<?= (preg_match('/blog/', Gravel::$request->uri)) ? 'active' : null; ?>"><a href="/admin/blog"><span class="glyphicon glyphicon-th-list"></span> Blog Posts</a></li>
+						<li class="<?= (preg_match('/brands/', Gravel::$request->uri)) ? 'active' : null; ?>"><a href="/admin/brands"><span class="glyphicon glyphicon-th-list"></span> Brands</a></li>
 					</ul>
 				</div>
 				<div class="col-md-10">
