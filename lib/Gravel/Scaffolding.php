@@ -34,7 +34,7 @@ class Scaffolding
 
 		$recordData = $model::find($id);
 
-		$output = self::generateFormOpenTag();
+		$output = self::generateFormOpenTag($id);
 		foreach ($columns as $column) {
 			$property = $column['Field'];
 			$output .= self::generateFormGroup($column, $recordData->$property);
@@ -86,10 +86,18 @@ class Scaffolding
 		return $output;
 	}
 
-	public static function generateFormOpenTag()
+	public static function generateFormOpenTag($id = null)
 	{
-		return "
+		$output = "
 			<form action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\" accept-charset=\"utf-8\">";
+
+		if (!is_null($id)) {
+			$output .= "<input type=\"hidden\" name=\"id\" value=\"{$id}\">";
+		}
+
+
+		return $output;
+
 	}
 
 	public static function generateFormCloseTag()

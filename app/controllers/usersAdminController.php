@@ -1,6 +1,6 @@
 <?php
 
-class usersAdminController extends authController
+class usersAdminController extends authController implements crudInterface
 {
 	public function __construct()
 	{
@@ -27,7 +27,7 @@ class usersAdminController extends authController
 		$this->loadView('admin/users/create');
 	}
 
-	public function update($id)
+	public function update($id = null)
 	{
 		$id = $id;
 		$user = User::find($id);
@@ -42,7 +42,7 @@ class usersAdminController extends authController
 		$this->loadView('admin/users/edit', compact('user', 'id'));
 	}
 
-	public function delete($id)
+	public function delete($id = null)
 	{
 		User::delete($id);
 		header("Location: {$_SERVER['HTTP_REFERER']}");

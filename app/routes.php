@@ -26,6 +26,7 @@ function gravelRoutes()
 	// generate crud based paths for admin side
 	Router::createCRUD($routes, '/admin/users', 'usersAdminController');
 	Router::createCRUD($routes, '/admin/blog', 'blogAdminController');
+	Router::createCRUD($routes, '/admin/brands', 'brandAdminController');
 
 	return $routes;
 }
