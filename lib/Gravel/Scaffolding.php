@@ -106,6 +106,7 @@ class Scaffolding
 		   			<div class="form-group">
 				<button type="submit" class="btn btn-sm btn-primary">Save</button>
 				<button type="reset" class="btn btn-sm btn-warning">Reset</button>
+				<a href="{$_SERVER['HTTP_REFERER']}" class="btn btn-danger no-prompt btn-sm">Cancel</a>
 			</div>
 EOT;
 	}

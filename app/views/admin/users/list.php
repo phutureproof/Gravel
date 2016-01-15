@@ -16,7 +16,7 @@
 				<td><?= $user->email; ?></td>
 				<td nowrap>
 					<a href="/admin/users/edit/<?= $user->id; ?>" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
-					<a href="/admin/users/delete/<?= $user->id; ?>" class="btn btn-xs btn-danger confirm"><span class="glyphicon glyphicon-trash"></span></a>
+					<a href="/admin/users/delete/<?= $user->id; ?>" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

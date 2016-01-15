@@ -50,6 +50,7 @@
 						<li><a href="/admin/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 						<li class="separator"></li>
 						<li><a href="/admin/users"><span class="glyphicon glyphicon-th-list"></span> Users</a></li>
+						<li><a href="/admin/blog"><span class="glyphicon glyphicon-th-list"></span> Blog Posts</a></li>
 					</ul>
 				</div>
 				<div class="col-md-10">
@@ -60,6 +61,7 @@
 
 		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script src="/public/js/admin.js"></script>
 
 		@yield('javascript')
 	</body>

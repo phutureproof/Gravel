@@ -18,6 +18,7 @@ class usersAdminController extends authController
 		if (count($_POST) > 0) {
 			$user = User::create();
 			if ($user->validate($_POST)) {
+				$user->password = sha1($user->password); // hash password
 				$user->save();
 				header("Location: /admin/users");
 				exit;
