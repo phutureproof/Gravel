@@ -11,8 +11,9 @@ class RecordEntity
     private $_table;
     private $_idColumn = '';
     private $_validationRules = [];
+	private $_relations = [];
 
-    public function __construct($data = [], $hiddenColumns = [], $table = '', $idColumn = '', $validationRules = [])
+	public function __construct($data = [], $hiddenColumns = [], $table = '', $idColumn = '', $validationRules = [], $relations = [])
     {
         foreach ($data as $k => $v) {
             $this->_data[$k] = $v;
@@ -25,6 +26,7 @@ class RecordEntity
         $this->_table = $table;
         $this->_idColumn = $idColumn;
         $this->_validationRules = $validationRules;
+	    $this->_relations = $relations;
     }
 
     public function __get($name)
@@ -134,4 +136,18 @@ class RecordEntity
 
         return true;
     }
+
+	public function fetchRelation($relation = null)
+	{
+		if (!is_null($relation) && isset($this->_relations[$relation])) {
+			$model = $this->_relations[$relation][0];
+			return $model::find($this->_data[$relation]);
+		}
+	}
+
+	public function getRelations()
+	{
+		return $this->_relations;
+	}
+
 }

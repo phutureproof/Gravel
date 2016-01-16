@@ -8,6 +8,7 @@ function gravelRoutes()
 	$routes = [
 		'GET'  => [
 			'/'                => 'pagesController::home',
+			'/tests'           => 'testController::index',
 
 			// standard admin routes
 			'/admin'           => 'loginController::index',
