@@ -126,6 +126,7 @@ class Scaffolding
 			}
 
 			$output .= "</select>";
+			return $output;
 		}
 
 		// text fields (single line input)
@@ -133,6 +134,7 @@ class Scaffolding
 			$oldPost = isset($_POST[$column]) ? $_POST[$column] : $defaultValue;
 			$output = "
 				<input type=\"text\" id=\"{$column}\" name=\"{$column}\" class=\"form-control\" placeholder=\"{$default}\" value=\"{$oldPost}\" />";
+			return $output;
 		}
 
 		// text areas (multiline input)
@@ -141,15 +143,15 @@ class Scaffolding
 			$wysiwygClass = (preg_match('/html/', $comment)) ? 'wysiwyg' : null;
 			$output = "
 				<textarea id=\"{$column}\" name=\"{$column}\" class=\"form-control {$wysiwygClass}\" placeholder=\"{$default}\" rows=\"10\">{$defaultValue}</textarea>";
+			return $output;
 		}
-		return $output;
 	}
 
 	public static function generateButtons()
 	{
 		return /** @lang HTML */
 			<<<EOT
-		   			<div class="form-group">
+			<div class="form-group">
 				<div class="row">
 					<div class="col-md-4">
 						<button type="submit" class="btn btn-sm btn-primary btn-block">Save</button>
