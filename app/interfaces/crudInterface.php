@@ -9,7 +9,7 @@ interface crudInterface
 {
 	public function create();
 
-	public function read();
+	public function read($page = 1);
 
 	public function update($id = null);
 

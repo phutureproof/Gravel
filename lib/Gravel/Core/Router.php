@@ -19,6 +19,7 @@ class Router
 			'GET'  => [
 				$path . '/create'       => "{$controller}::create",
 				$path                   => "{$controller}::read",
+				$path . '/(num)'        => "{$controller}::read",
 				$path . '/edit/(num)'   => "{$controller}::update",
 				$path . '/delete/(num)' => "{$controller}::delete"
 			],

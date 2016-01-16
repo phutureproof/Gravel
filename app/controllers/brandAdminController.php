@@ -20,7 +20,7 @@ class brandAdminController extends authController implements crudInterface
 		$this->loadView('admin/brands/create');
 	}
 
-	public function read()
+	public function read($page = 1)
 	{
 		$brands = Brand::all();
 		$this->loadView('admin/brands/list', compact('brands'));
