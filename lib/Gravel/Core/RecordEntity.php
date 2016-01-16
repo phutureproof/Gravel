@@ -127,8 +127,6 @@ class RecordEntity
         }
 
         foreach ($this->_data as $k => $v) {
-	        echo $data[$k];
-
             if (isset($data[$k])) {
                 $this->_data[$k] = $data[$k];
             }
