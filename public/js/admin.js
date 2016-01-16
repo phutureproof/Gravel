@@ -14,6 +14,8 @@
 		});
 	}
 
+	init();
+
 	$(function () {
 
 		// confirmation class
@@ -22,6 +24,7 @@
 		});
 
 		// nav links
+		/*
 		$doc.on('click', 'a', function (e) {
 			e.preventDefault();
 			$.ajax({
@@ -34,8 +37,10 @@
 				}
 			});
 		});
+		 */
 
 		// form submissions
+		/*
 		$doc.on('submit', 'form', function (e) {
 			e.preventDefault();
 			$.ajax({
@@ -49,6 +54,7 @@
 				}
 			});
 		});
+		 */
 
 	});
 

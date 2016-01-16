@@ -61,6 +61,10 @@ class Scaffolding
 
 	public static function generateFormGroup($columnData, $model, $defaultValue = null)
 	{
+		if ($columnData['Field'] == 'id') {
+			return;
+		}
+
 		$output = '
 			<div class="form-group">';
 		$output .= self::generateLabel($columnData);
@@ -149,6 +153,10 @@ class Scaffolding
 
 	public static function generateButtons()
 	{
+		if (!isset($_SERVER['HTTP_REFERER'])) {
+			$_SERVER['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
+		}
+
 		return /** @lang HTML */
 			<<<EOT
 			<div class="form-group">

@@ -8,7 +8,6 @@ function gravelRoutes()
 	$routes = [
 		'GET'  => [
 			'/'                => 'pagesController::home',
-			'/tests'           => 'testController::index',
 
 			// standard admin routes
 			'/admin'           => 'loginController::index',
@@ -28,6 +27,7 @@ function gravelRoutes()
 	Router::createCRUD($routes, '/admin/users', 'usersAdminController');
 	Router::createCRUD($routes, '/admin/blog', 'blogAdminController');
 	Router::createCRUD($routes, '/admin/brands', 'brandAdminController');
+	Router::createCRUD($routes, '/admin/tests', 'testAdminController');
 
 	return $routes;
 }
