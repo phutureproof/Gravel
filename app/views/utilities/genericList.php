@@ -8,13 +8,13 @@
 <?= $pagination; ?>
 
 <?php if (count($records) > 0): ?>
-	<table class="table table-striped table-hover">
+	<table class="table table-striped table-hover table-condensed table-bordered">
 		<thead>
 			<tr>
 				<?php foreach ($tableHeaders as $header): ?>
-					<th><?= $header; ?></th>
+					<th><?= strtoupper($header); ?></th>
 				<?php endforeach; ?>
-				<th style="width: 5%;">options</th>
+				<th style="width: 5%;">OPTIONS</th>
 			</tr>
 		</thead>
 		<tbody>
