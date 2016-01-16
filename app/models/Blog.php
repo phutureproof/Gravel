@@ -9,4 +9,8 @@ class Blog extends Gravel\Model
 		'title'   => ['Title', 'required'],
 		'content' => ['Content', 'required']
 	];
+
+	protected static $relations = [
+		'user_id' => ['User', 'id', 'firstname']
+	];
 }
