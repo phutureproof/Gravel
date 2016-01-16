@@ -52,7 +52,7 @@ class RecordEntity
     {
         $db = Database::getInstance();
         $data = $this->_data;
-	    $key = $this->_idColumn; // this is the primary key column (assumed to be the first column in a table)
+	    $key = $this->_idColumn;
 
         // saving as a new record
         if (empty($this->_data[$this->_idColumn])) {
