@@ -1,6 +1,8 @@
 @extends('templates/admin')
 @section('content')
 <a href="/admin/users/create" class="btn btn-primary">Create User</a>
+<br>
+<?= $pagination; ?>
 <table class="table table-hover table-striped">
 	<thead>
 		<tr>
@@ -22,4 +24,5 @@
 		<?php endforeach; ?>
 	</tbody>
 </table>
+<?= $pagination; ?>
 @endsection

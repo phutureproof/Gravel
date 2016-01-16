@@ -10,7 +10,12 @@
 		// confirmation class
 		$doc.on('click', '.btn-danger:not(.no-prompt)', function (e) {
 			return confirm('Are you sure you want to continue?');
-		})
+		});
+
+		// wysiwyg
+		$('.wysiwyg').summernote({
+			height: 300
+		});
 
 	});
 

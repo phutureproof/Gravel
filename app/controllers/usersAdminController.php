@@ -1,16 +1,21 @@
 <?php
 
+use Gravel\TemplateEngine;
+
 class usersAdminController extends authController implements crudInterface
 {
 	public function __construct()
 	{
 		parent::__construct();
+		TemplateEngine::extendPageTitle(' :: Users');
 	}
 
-	public function read()
+	public function read($page = 1)
 	{
 		$users = User::all();
-		$this->loadView('admin/users/list', compact('users'));
+		$users->paginate(5, $page);
+		$pagination = $users->generatePaginationLinks("/admin/users/", $page);
+		$this->loadView('admin/users/list', compact('users', 'pagination'));
 	}
 
 	public function create()

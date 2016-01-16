@@ -1,11 +1,14 @@
 <?php
 
+use Gravel\TemplateEngine;
+
 class blogAdminController extends authController implements crudInterface
 {
 
 	public function __construct()
 	{
 		parent::__construct();
+		TemplateEngine::extendPageTitle(' :: Blog');
 	}
 
 	public function create()
@@ -21,10 +24,12 @@ class blogAdminController extends authController implements crudInterface
 		$this->loadView('admin/blog/create');
 	}
 
-	public function read()
+	public function read($page = 1)
 	{
 		$posts = Blog::all();
-		$this->loadView('admin/blog/list', compact('posts'));
+		$posts->paginate(2, $page);
+		$pagination = $posts->generatePaginationLinks('/admin/blog', $page);
+		$this->loadView('admin/blog/list', compact('posts', 'pagination'));
 	}
 
 	public function update($id = null)

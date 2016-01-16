@@ -1,5 +1,7 @@
 <?php
 
+use Gravel\TemplateEngine;
+
 class authController extends \Gravel\Controller
 {
 	public function __construct()
@@ -8,5 +10,7 @@ class authController extends \Gravel\Controller
 			header("Location: /admin");
 			exit;
 		}
+
+		TemplateEngine::setPageTitle('Dashboard');
 	}
 }
