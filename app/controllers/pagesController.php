@@ -21,4 +21,9 @@ class pagesController extends Controller
         $pagination = $users->generatePaginationLinks('/page/', $page);
         $this->loadView('home', compact('users', 'pagination'));
     }
+
+	public function info()
+	{
+		phpinfo();
+	}
 }

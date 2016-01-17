@@ -12,7 +12,7 @@
 		<thead>
 			<tr>
 				<?php foreach ($tableHeaders as $header): ?>
-					<th><?= strtoupper($header); ?></th>
+					<th><?= strtoupper(str_replace("_", " ", $header)); ?></th>
 				<?php endforeach; ?>
 				<th style="width: 5%;">OPTIONS</th>
 			</tr>
@@ -21,8 +21,10 @@
 			<?php foreach ($records as $record): ?>
 				<tr>
 					<?php foreach ($tableHeaders as $property): ?>
-						<td style="overflow: hidden;">
-							<?= substr(strip_tags($record->$property), 0, 100); ?>
+						<td>
+							<div style="overflow: hidden; max-height: 25px;">
+								<?= substr(strip_tags($record->$property), 0, 100); ?>
+							</div>
 						</td>
 					<?php endforeach; ?>
 					<td nowrap>
