@@ -6,13 +6,19 @@ use Gravel\Core\Database;
 
 class Scaffolding
 {
-	public static function createInsertForm($table, $model)
+	public static function getColumnData($table)
 	{
 		$db = Database::getInstance();
 		$sql = "SHOW FULL COLUMNS FROM `{$table}`";
 		$statement = $db->prepare($sql);
 		$statement->execute();
 		$columns = $statement->fetchAll(\PDO::FETCH_ASSOC);
+		return $columns;
+	}
+
+	public static function createInsertForm($table, $model)
+	{
+		$columns = self::getColumnData($table);
 		$model = $model::create();
 
 		$output = self::generateFormOpenTag();
@@ -27,11 +33,7 @@ class Scaffolding
 
 	public static function createEditForm($table, $model, $id)
 	{
-		$db = Database::getInstance();
-		$sql = "SHOW FULL COLUMNS FROM `{$table}`";
-		$statement = $db->prepare($sql);
-		$statement->execute();
-		$columns = $statement->fetchAll(\PDO::FETCH_ASSOC);
+		$columns = self::getColumnData($table);
 
 		$recordData = $model::find($id);
 		$model = $model::create();
@@ -49,11 +51,10 @@ class Scaffolding
 
 	public static function generateFormOpenTag($id = null)
 	{
-		$output = "
-			<form action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\" accept-charset=\"utf-8\">";
+		$output = "<form action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\" accept-charset=\"utf-8\">\n";
 
 		if (!is_null($id)) {
-			$output .= "<input type=\"hidden\" name=\"id\" value=\"{$id}\">";
+			$output .= "<input type=\"hidden\" name=\"id\" value=\"{$id}\">\n";
 		}
 
 		return $output;
@@ -61,21 +62,22 @@ class Scaffolding
 
 	public static function generateFormGroup($columnData, $model, $defaultValue = null)
 	{
-		$output = '
-			<div class="form-group">';
+		if ($columnData['Field'] == 'id') {
+			return;
+		}
+
+		$output = '<div class="form-group">';
 		$output .= self::generateLabel($columnData);
 		$output .= self::generateInput($columnData, $model, $defaultValue);
 
-		$output .= '
-			</div>';
+		$output .= '</div>';
 
 		return $output;
 	}
 
 	public static function generateLabel($columnData)
 	{
-		return "
-				<label for=\"{$columnData['Field']}\">{$columnData['Field']}</label>";
+		return "<label for=\"{$columnData['Field']}\">{$columnData['Field']}</label>";
 	}
 
 	public static function generateInput($columnData, $model, $defaultValue = null)
@@ -86,7 +88,6 @@ class Scaffolding
 		$comment = $columnData['Comment'];
 
 		$relations = $model->getRelations();
-
 
 		if (isset($relations[$column])) {
 			$values = [];
@@ -132,8 +133,7 @@ class Scaffolding
 		// text fields (single line input)
 		if (preg_match('/tinyint|smallint|mediumint|int|bigint|varchar/', $type)) {
 			$oldPost = isset($_POST[$column]) ? $_POST[$column] : $defaultValue;
-			$output = "
-				<input type=\"text\" id=\"{$column}\" name=\"{$column}\" class=\"form-control\" placeholder=\"{$default}\" value=\"{$oldPost}\" />";
+			$output = "<input type=\"text\" id=\"{$column}\" name=\"{$column}\" class=\"form-control\" placeholder=\"{$default}\" value=\"{$oldPost}\" />";
 			return $output;
 		}
 
@@ -141,14 +141,17 @@ class Scaffolding
 		if (preg_match('/smalltext|mediumtext|largetext|text/', $type)) {
 			$defaultValue = isset($_POST[$column]) ? $_POST[$column] : $defaultValue;
 			$wysiwygClass = (preg_match('/html/', $comment)) ? 'wysiwyg' : null;
-			$output = "
-				<textarea id=\"{$column}\" name=\"{$column}\" class=\"form-control {$wysiwygClass}\" placeholder=\"{$default}\" rows=\"10\">{$defaultValue}</textarea>";
+			$output = "<textarea id=\"{$column}\" name=\"{$column}\" class=\"form-control {$wysiwygClass}\" placeholder=\"{$default}\" rows=\"10\">{$defaultValue}</textarea>";
 			return $output;
 		}
 	}
 
 	public static function generateButtons()
 	{
+		if (!isset($_SERVER['HTTP_REFERER'])) {
+			$_SERVER['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
+		}
+
 		return /** @lang HTML */
 			<<<EOT
 			<div class="form-group">
@@ -169,9 +172,7 @@ EOT;
 
 	public static function generateFormCloseTag()
 	{
-		return "
-			</form>
-		";
+		return "</form>";
 	}
 
 }
