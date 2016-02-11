@@ -2,6 +2,8 @@
 
 namespace Gravel\Core;
 
+use \Gravel\Gravel;
+
 class Database
 {
 	private static $_instance;
@@ -12,7 +14,7 @@ class Database
 	 */
 	private function __construct()
 	{
-		$config = parse_ini_file(APP_DIR . '/app.config.ini', true)['database'];
+		$config = Gravel::$config['database'];
 
 		$this->_con = new \PDO(
 			"{$config['driver']}:host={$config['hostname']};dbname={$config['database']};charset={$config['charset']}",

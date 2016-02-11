@@ -30,7 +30,7 @@ class Router
 		]);
 	}
 
-	public function matchRoute()
+	public function matchRoute($asBool = false)
 	{
 		if (strlen(Gravel::$request->uri) !== 1) {
 			$uri = rtrim(Gravel::$request->uri, '/');
