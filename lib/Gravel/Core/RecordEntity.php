@@ -23,7 +23,7 @@ class RecordEntity
 			$this->_hiddenColumns[] = $column;
 		}
 
-		$this->_table = $table;
+		$this->_table = Gravel::$config['database']['table_prefix'].$table;
 		$this->_idColumn = $idColumn;
 		$this->_validationRules = $validationRules;
 		$this->_relations = $relations;
@@ -56,8 +56,26 @@ class RecordEntity
 		$data = $this->_data;
 		$key = $this->_idColumn;
 
+		if(isset($this->_data['created_at']) && $this->_data['created_at'] == '0000-00-00 00:00:00')
+		{
+			$this->_data['created_at'] = date('Y-m-d H:i:s', time());
+		}
+
+		if(isset($this->_data['updated_at']))
+		{
+			$this->_data['updated_at'] = date('Y-m-d H:i:s', time());
+		}
+
 		// saving as a new record
 		if (empty($this->_data[$this->_idColumn])) {
+			if (isset($this->_data['created_at']))
+			{
+				$this->_data['created_at'] = date('Y-m-d H:i:s', time());
+			}
+			if(isset($this->_data['updated_at']))
+			{
+				$this->_data['updated_at'] = date('Y-m-d H:i:s', time());
+			}
 			$columns = array_keys($this->_data);
 			$values = array_values($this->_data);
 			$columnsInsert = implode(", ", $columns);
@@ -68,7 +86,13 @@ class RecordEntity
 			// or saving an update
 			// for an update we remove the primary key
 			// and use it at the end for the where clause
-			$columns = array_diff_key($data, [$key => $key]);
+
+			if(isset($this->_data['updated_at']))
+			{
+				$this->_data['updated_at'] = date('Y-m-d H:i:s', time());
+			}
+
+			$columns = array_diff_key($this->_data, [$key => $key]);
 			$values = array_values($columns);
 			$updates = [];
 			foreach ($columns as $k => $v) {
@@ -77,7 +101,6 @@ class RecordEntity
 			$updates = implode(', ', $updates);
 			$sql = "UPDATE {$this->_table} SET {$updates} WHERE {$key} = {$data[$key]}";
 		}
-
 		$statement = $db->prepare($sql);
 		return $statement->execute($values);
 	}
@@ -85,7 +108,13 @@ class RecordEntity
 	public function validate($data = [])
 	{
 		// no rules to validate so return true
-		if (count($this->_validationRules) === 0) {
+		if (count($this->_validationRules) == 0) {
+			foreach ($this->_data as $k => $v) {
+				if (isset($data[$k])) {
+					$this->_data[$k] = $data[$k];
+				}
+			}
+
 			return true;
 		}
 
@@ -137,9 +166,10 @@ class RecordEntity
 		return true;
 	}
 
-	public function fetchRelation($relation = null)
+	public function getRelation($relation = null)
 	{
 		if (!is_null($relation) && isset($this->_relations[$relation])) {
+			/** @var $model \Gravel\Model */
 			$model = $this->_relations[$relation][0];
 			return $model::find($this->_data[$relation]);
 		}

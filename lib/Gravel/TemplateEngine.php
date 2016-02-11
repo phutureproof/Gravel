@@ -9,37 +9,60 @@ abstract class TemplateEngine
 		'compiled' => ''
 	];
 
+	public static $pageTitle;
+	public static $pageKeywords;
+	public static $pageDescription;
+
 	public static $includeRegex = "!@include\('(?<includes>.*)'\)!";
 	public static $yieldRegex = "!@yield\('(?<yields>.*)'\)!";
 	public static $extendsRegex = "!@extends\('(?<extends>.*)'\)!";
 	public static $sectionsRegex = "!@section\('(?<sections>.*)'\)!";
 	private static $_privateTemplateName = 'gravel_private_template';
-	private static $_pageTitle = 'Gravel';
 
-	/**
-	 * @return string
-	 */
 	public static function getPageTitle()
 	{
-		return static::$_pageTitle;
+		return self::$pageTitle;
 	}
 
-	/**
-	 * @param string $pageTitle
-	 */
-	public static function setPageTitle($pageTitle)
+	public static function setPageTitle($title)
 	{
-		static::$_pageTitle = $pageTitle;
+		self::$pageTitle = $title;
 	}
 
-	/**
-	 * @param string $pageTitle
-	 */
-	public static function extendPageTitle($pageTitle)
+	public static function extendPageTitle($title)
 	{
-		static::$_pageTitle .= $pageTitle;
+		self::$pageTitle .= ' ' . $title;
 	}
 
+	public static function getPageKeywords()
+	{
+		return self::$pageKeywords;
+	}
+
+	public static function setPageKeywords($keywords)
+	{
+		self::$pageKeywords = $keywords;
+	}
+
+	public static function extendPageKeywords($keywords)
+	{
+		self::$pageKeywords .= ' ' . $keywords;
+	}
+
+	public static function getPageDescription()
+	{
+		return self::$pageDescription;
+	}
+
+	public static function setPageDescription($description)
+	{
+		self::$pageDescription = $description;
+	}
+
+	public static function extendPageDescription($description)
+	{
+		self::$pageDescription .= ' ' . $description;
+	}
 
 	public static function parseTemplate($file, $data = [], $isInclude = false)
 	{
@@ -72,9 +95,9 @@ abstract class TemplateEngine
 			if (preg_match_all(self::$includeRegex, $output, $matches)) {
 				foreach ($matches['includes'] as $include) {
 					$toAdd['includes'][$include] = true;
-					$toAdd['sections'][self::$_privateTemplateName] = $output;
 					$replace = self::parseTemplate(APP_DIR . '/views/' . $include . '.php', $data, true);
 					$output = str_replace("@include('{$include}')", $replace, $output);
+					$toAdd['sections'][self::$_privateTemplateName] = $output;
 				}
 			}
 
@@ -100,7 +123,9 @@ abstract class TemplateEngine
 					$toAdd['sections'][$matchedSectionTitles[$k]] = $v;
 				}
 			}
+
 			self::$data['views'][$file] = $toAdd;
+
 		}
 		return $output;
 	}
@@ -130,6 +155,7 @@ abstract class TemplateEngine
 				foreach ($sections as $section => $content) {
 					$views[$view]['sections'][self::$_privateTemplateName] = str_replace("@include('$section')", $content, $views[$view]['sections'][self::$_privateTemplateName]);
 				}
+				self::$data['compiled'] = $views[$view]['sections'][self::$_privateTemplateName];
 			}
 		}
 
@@ -148,7 +174,8 @@ abstract class TemplateEngine
 
 		// build yields
 		foreach ($views as $view => $data) {
-			if (isset($data['yields']) ) {
+
+			if (isset($data['yields'])) {
 				$sections = array_diff_key($data['sections'], [self::$_privateTemplateName => '']);
 				foreach ($sections as $section => $content) {
 					$views[$view]['sections'][self::$_privateTemplateName] = str_replace("@yield('$section')", $content, $views[$view]['sections'][self::$_privateTemplateName]);

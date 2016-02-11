@@ -2,10 +2,18 @@
 
 namespace Gravel;
 
+use Gravel\Gravel;
 use Gravel\Core\Database;
 
 class Scaffolding
 {
+	/**
+	 * getColumnData
+	 *
+	 * @param $table
+	 *
+	 * @return array
+	 */
 	public static function getColumnData($table)
 	{
 		$db = Database::getInstance();
@@ -16,9 +24,18 @@ class Scaffolding
 		return $columns;
 	}
 
+	/**
+	 * createInsertForm
+	 *
+	 * @param $table
+	 * @param $model
+	 *
+	 * @return string
+	 */
 	public static function createInsertForm($table, $model)
 	{
 		$columns = self::getColumnData($table);
+
 		$model = $model::create();
 
 		$output = self::generateFormOpenTag();
@@ -31,6 +48,15 @@ class Scaffolding
 		return $output;
 	}
 
+	/**
+	 * createEditForm
+	 *
+	 * @param $table
+	 * @param $model
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	public static function createEditForm($table, $model, $id)
 	{
 		$columns = self::getColumnData($table);
@@ -49,6 +75,13 @@ class Scaffolding
 		return $output;
 	}
 
+	/**
+	 * generateFormOpenTag
+	 *
+	 * @param null $id
+	 *
+	 * @return string
+	 */
 	public static function generateFormOpenTag($id = null)
 	{
 		$output = "<form action=\"{$_SERVER['REQUEST_URI']}\" method=\"post\" accept-charset=\"utf-8\">\n";
@@ -57,9 +90,34 @@ class Scaffolding
 			$output .= "<input type=\"hidden\" name=\"id\" value=\"{$id}\">\n";
 		}
 
+		if(Gravel::$config['gravel']['csrf_tokens'])
+		{
+			$token = $_SESSION['csrf_token'] = sha1(microtime(true));
+			$output .= "<input type=\"hidden\" name=\"csrf_token\" value=\"{$token}\" >";
+		}
+
 		return $output;
 	}
 
+	/**
+	 * generateFormCloseTag
+	 *
+	 * @return string
+	 */
+	public static function generateFormCloseTag()
+	{
+		return "</form>";
+	}
+
+	/**
+	 * generateFormGroup
+	 *
+	 * @param      $columnData
+	 * @param      $model
+	 * @param null $defaultValue
+	 *
+	 * @return string|void
+	 */
 	public static function generateFormGroup($columnData, $model, $defaultValue = null)
 	{
 		if ($columnData['Field'] == 'id') {
@@ -75,11 +133,29 @@ class Scaffolding
 		return $output;
 	}
 
+	/**
+	 * generateLabel
+	 *
+	 * @param $columnData
+	 *
+	 * @return string
+	 */
 	public static function generateLabel($columnData)
 	{
-		return "<label for=\"{$columnData['Field']}\">{$columnData['Field']}</label>";
+		$displayText = str_replace(['_'], [' '], $columnData['Field']);
+		$displayText = ucwords(preg_replace("/ id$/i", '', $displayText));
+		return "<label for=\"{$columnData['Field']}\">{$displayText}</label>";
 	}
 
+	/**
+	 * generateInput
+	 *
+	 * @param      $columnData
+	 * @param      $model
+	 * @param null $defaultValue
+	 *
+	 * @return string
+	 */
 	public static function generateInput($columnData, $model, $defaultValue = null)
 	{
 		$column = $columnData['Field'];
@@ -95,6 +171,18 @@ class Scaffolding
 			$valueProperty = $relations[$column][1];
 			$labelProperty = $relations[$column][2];
 			$records = $model::all();
+
+			if(preg_match('!admin/users/create!', Gravel::$request->uri) && $_SESSION['admin-role'] > 1)
+			{
+				$records->filter(function($record){
+					if ($record->title == 'developer')
+					{
+						return false;
+					}
+					return true;
+				});
+			}
+
 			foreach ($records as $record) {
 				array_push($values, ['value' => $record->$valueProperty, 'label' => $record->$labelProperty]);
 			}
@@ -105,7 +193,7 @@ class Scaffolding
 			// loop values creating options
 			foreach ($values as $k => $v) {
 				$selected = ($defaultValue == $v['value']) ? 'selected' : 'null';
-				$output .= "<option value=\"{$v['value']}\" {$selected}>{$v['value']} - {$v['label']}</option>";
+				$output .= "<option value=\"{$v['value']}\" {$selected}>{$v['label']}</option>";
 			}
 
 			$output .= "</select>";
@@ -137,6 +225,16 @@ class Scaffolding
 			return $output;
 		}
 
+		// datepickers
+		// text fields (single line input)
+		if (preg_match('/timestamp/', $type)) {
+			$oldPost = isset($_POST[$column]) ? $_POST[$column] : $defaultValue;
+			$readonly = (in_array($column, ['created_at', 'updated_at'])) ? 'readonly' : null;
+			$datepicker = !($readonly) ? 'datepicker' : null;
+			$output = "<input type=\"text\" id=\"{$column}\" name=\"{$column}\" class=\"form-control {$datepicker}\" placeholder=\"{$default}\" value=\"{$oldPost}\" {$readonly}/>";
+			return $output;
+		}
+
 		// text areas (multiline input)
 		if (preg_match('/smalltext|mediumtext|largetext|text/', $type)) {
 			$defaultValue = isset($_POST[$column]) ? $_POST[$column] : $defaultValue;
@@ -146,6 +244,11 @@ class Scaffolding
 		}
 	}
 
+	/**
+	 * generateButtons
+	 *
+	 * @return string
+	 */
 	public static function generateButtons()
 	{
 		if (!isset($_SERVER['HTTP_REFERER'])) {
@@ -170,9 +273,6 @@ class Scaffolding
 EOT;
 	}
 
-	public static function generateFormCloseTag()
-	{
-		return "</form>";
-	}
+
 
 }
